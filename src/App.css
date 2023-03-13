@@ -40,3 +40,12 @@
 .read-the-docs {
   color: #888;
 }
+
+
+.weatherdata h1 {
+  background-color: yellow;
+  margin: 8px;
+  padding: 8px;
+  border-radius: 12px;
+
+}
