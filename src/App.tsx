@@ -1,71 +1,16 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { getWeatherData } from "./components/weather.api";
-
-export interface Report {
-  coord: Coord;
-  weather: Weather[];
-  base: string;
-  main: Main;
-  visibility: number;
-  wind: Wind;
-  clouds: Clouds;
-  dt: number;
-  sys: Sys;
-  timezone: number;
-  id: number;
-  name: string;
-  cod: number;
-}
-
-export interface Clouds {
-  all: number;
-}
-
-export interface Coord {
-  lon: number;
-  lat: number;
-}
-
-export interface Main {
-  temp: number;
-  feels_like: number;
-  temp_min: number;
-  temp_max: number;
-  pressure: number;
-  humidity: number;
-  sea_level: number;
-  grnd_level: number;
-}
-
-export interface Sys {
-  country: string;
-  sunrise: number;
-  sunset: number;
-}
-
-export interface Weather {
-  id: number;
-  main: string;
-  description: string;
-  icon: string;
-}
-
-export interface Wind {
-  speed: number;
-  deg: number;
-  gust: number;
-}
+import { Report } from "./types/common types/common.types";
 
 function App() {
   const [weatherdata, setWeatherdata] = useState<Report>();
   const [search, setsearch] = useState("");
-  const a = async (city: string) => {
-    const b = await getWeatherData(city);
-
-    console.log(b);
-    setWeatherdata(b);
-    return b;
+  const fetchData = async (city: string) => {
+    const apiData = await getWeatherData(city);
+    console.log(apiData);
+    setWeatherdata(apiData);
+    return apiData;
   };
 
   const handle = (e: any) => {
@@ -74,18 +19,19 @@ function App() {
 
     setsearch(e.target.value);
   };
-  const searchCity = () => {
-    a(search);
+  const searchCity = (e:any) => {
+e.preventDefault();
+    fetchData(search);
   };
   useEffect(() => {
-    a("");
+    fetchData("");
   }, []);
 
   return (
     <>
-      <form>
+      <form onSubmit={searchCity} >
         <input onChange={handle} type="text" name="" id="" />
-        <button type="button" onClick={searchCity}>
+        <button type="submit" >
           search
         </button>
       </form>
@@ -99,7 +45,7 @@ function App() {
         <h1> min temp: {weatherdata && weatherdata.main.temp_min}</h1>
 
         <h1>
-          weather description:{" "}
+          weather description:
           {weatherdata && weatherdata.weather[0].description}
         </h1>
       </div>
